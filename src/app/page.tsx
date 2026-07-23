@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { globalDb } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const tournaments = globalDb.tournaments.filter(t => t.status === "open").sort((a, b) => b.createdAt - a.createdAt);
+  let tournaments: any[] = [];
+  try {
+    tournaments = await prisma.tournament.findMany({
+      where: { status: "open" },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    console.error("Database connection failed. Vercel build might be missing DATABASE_URL:", error);
+  }
 
   return (
     <div className="min-h-screen">

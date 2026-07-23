@@ -1,26 +1,31 @@
 import { NextResponse } from "next/server";
-import { globalDb } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  return NextResponse.json(globalDb.tournaments.sort((a, b) => b.createdAt - a.createdAt));
+  try {
+    const tournaments = await prisma.tournament.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json(tournaments);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch tournaments" }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    const newTournament = {
-      id: Math.random().toString(36).substring(7),
-      name: data.name,
-      format: data.format,
-      startDate: new Date(data.startDate).toISOString(),
-      endDate: new Date(data.endDate).toISOString(),
-      venue: data.venue,
-      prizePool: data.prizePool,
-      bannerImage: data.bannerImage,
-      status: "open",
-      createdAt: Date.now(),
-    };
-    globalDb.tournaments.push(newTournament);
+    const newTournament = await prisma.tournament.create({
+      data: {
+        name: data.name,
+        format: data.format,
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+        venue: data.venue,
+        prizePool: data.prizePool,
+        bannerImage: data.bannerImage,
+      },
+    });
     return NextResponse.json(newTournament);
   } catch (error) {
     return NextResponse.json({ error: "Failed to create tournament" }, { status: 500 });

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -16,7 +16,8 @@
     "cloudinary": "^2.4.0",
     "lucide-react": "^0.427.0",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.2"
+    "tailwind-merge": "^2.5.2",
+    "@prisma/client": "^5.18.0"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -27,6 +28,7 @@
     "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.17",
     "eslint": "^8",
-    "eslint-config-next": "14.2.5"
+    "eslint-config-next": "14.2.5",
+    "prisma": "^5.18.0"
   }
 }
