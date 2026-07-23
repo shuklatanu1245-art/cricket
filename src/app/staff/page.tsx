@@ -29,20 +29,34 @@ function StaffDashboardContent() {
   }, [selectedTournament, status]);
 
   const fetchTournaments = async () => {
-    const res = await fetch("/api/tournaments");
-    const data = await res.json();
-    setTournaments(data);
-    if (!selectedTournament && data.length > 0) {
-      setSelectedTournament(data[0].id);
+    try {
+      const res = await fetch("/api/tournaments");
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setTournaments(data as never[]);
+        if (!selectedTournament && data.length > 0) {
+          setSelectedTournament(data[0].id);
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
   const fetchRegistrations = async () => {
     setLoading(true);
-    const url = selectedTournament ? `/api/registrations?tournamentId=${selectedTournament}` : "/api/registrations";
-    const res = await fetch(url);
-    const data = await res.json();
-    setRegistrations(data);
+    try {
+      const url = selectedTournament ? `/api/registrations?tournamentId=${selectedTournament}` : "/api/registrations";
+      const res = await fetch(url);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setRegistrations(data as never[]);
+      } else {
+        console.error("API returned an error:", data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
     setLoading(false);
   };
 

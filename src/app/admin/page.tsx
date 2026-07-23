@@ -31,9 +31,18 @@ export default function AdminDashboard() {
   }, [status, session, router]);
 
   const fetchTournaments = async () => {
-    const res = await fetch("/api/tournaments");
-    const data = await res.json();
-    setTournaments(data);
+    try {
+      const res = await fetch("/api/tournaments");
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setTournaments(data as never[]);
+      } else {
+        console.error("API returned an error:", data);
+        alert("Failed to load tournaments. Please check if your DATABASE_URL is correct in Vercel.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
     setLoading(false);
   };
 
