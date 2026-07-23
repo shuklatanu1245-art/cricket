@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  role      String   @default("staff") // "admin" or "staff"
+  createdAt DateTime @default(now())
+}
+
+model Tournament {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  format        String
+  startDate     DateTime
+  endDate       DateTime
+  venue         String
+  prizePool     String
+  bannerImage   String         // Cloudinary URL
+  status        String         @default("open") // "open" or "closed"
+  createdAt     DateTime       @default(now())
+  registrations Registration[]
+}
+
+model Registration {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  tournamentId    String     @db.ObjectId
+  tournament      Tournament @relation(fields: [tournamentId], references: [id])
+  
+  // Registration Details
+  regType         String     // "Individual" or "Team"
+  teamName        String?    
+  
+  // Personal Details
+  fullName        String
+  dob             DateTime
+  email           String
+  phone           String
+  whatsapp        String?
+  
+  // Player Profile
+  role            String
+  battingStyle    String
+  bowlingStyle    String
+  
+  // Medical
+  emergencyName   String
+  emergencyPhone  String
+  
+  // Documents (Cloudinary URLs)
+  profilePhotoUrl String
+  govIdUrl        String
+  
+  // Payment
+  paymentMethod   String     // "Online" or "Cash"
+  paymentStatus   String     @default("pending") // "pending", "completed"
+  
+  createdAt       DateTime   @default(now())
+}
