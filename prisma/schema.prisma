@@ -8,16 +8,17 @@ datasource db {
 }
 
 model Tournament {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  format      String
-  startDate   DateTime
-  endDate     DateTime
-  venue       String
-  prizePool   String
-  bannerImage String
-  status      String   @default("open") // open, closed
-  createdAt   DateTime @default(now())
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  format          String
+  startDate       DateTime
+  endDate         DateTime
+  venue           String
+  prizePool       String
+  registrationFee String
+  bannerImage     String
+  status          String   @default("open") // open, closed
+  createdAt       DateTime @default(now())
 
   registrations Registration[]
 }

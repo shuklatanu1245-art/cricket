@@ -23,6 +23,7 @@ export async function POST(req: Request) {
         endDate: new Date(data.endDate),
         venue: data.venue,
         prizePool: data.prizePool,
+        registrationFee: data.registrationFee,
         bannerImage: data.bannerImage,
       },
     });

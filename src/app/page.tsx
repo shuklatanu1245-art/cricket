@@ -48,6 +48,7 @@ export default async function Home() {
                     <p>🏟️ {tournament.venue}</p>
                     <p>📅 {new Date(tournament.startDate).toLocaleDateString()} - {new Date(tournament.endDate).toLocaleDateString()}</p>
                     <p>💰 Prize Pool: <span className="text-electric-blue font-bold">{tournament.prizePool}</span></p>
+                    <p>🎫 Entry Fee: <span className="text-neon-green font-bold">{tournament.registrationFee}</span></p>
                   </div>
                   <Link href={`/tournament/${tournament.id}/register`} className="block text-center w-full bg-electric-blue hover:bg-neon-green text-navy font-bold py-3 rounded-lg transition-colors">
                     Register Now

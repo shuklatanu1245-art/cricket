@@ -98,9 +98,24 @@ export default function Register({ params }: { params: { id: string } }) {
     );
   }
 
+  const [tournament, setTournament] = useState<any>(null);
+
+  require("react").useEffect(() => {
+    fetch(`/api/tournaments/${params.id}`)
+      .then(res => res.json())
+      .then(data => setTournament(data));
+  }, [params.id]);
+
   return (
     <div className="min-h-screen py-16 px-6 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold text-center mb-10 text-electric-blue">Player Registration</h1>
+      <h1 className="text-4xl font-bold text-center mb-2 text-electric-blue">Player Registration</h1>
+      {tournament && (
+        <p className="text-center text-xl text-gray-300 mb-10">
+          Registering for: <span className="font-bold text-white">{tournament.name}</span>
+          <br/>
+          Entry Fee: <span className="text-neon-green font-bold">{tournament.registrationFee}</span>
+        </p>
+      )}
       
       <form onSubmit={handleSubmit} className="glass-panel p-8 md:p-12 rounded-3xl shadow-2xl space-y-8">
         {/* Basic Info */}

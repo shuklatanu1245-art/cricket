@@ -1,6 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  try {
+    const tournament = await prisma.tournament.findUnique({
+      where: { id: params.id },
+    });
+    return NextResponse.json(tournament);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch tournament" }, { status: 500 });
+  }
+}
+
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
     const data = await req.json();

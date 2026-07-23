@@ -17,6 +17,7 @@ export default function AdminDashboard() {
   const [endDate, setEndDate] = useState("");
   const [venue, setVenue] = useState("");
   const [prizePool, setPrizePool] = useState("");
+  const [registrationFee, setRegistrationFee] = useState("");
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -70,7 +71,7 @@ export default function AdminDashboard() {
       await fetch("/api/tournaments", {
         method: "POST",
         body: JSON.stringify({
-          name, format, startDate, endDate, venue, prizePool, bannerImage: url
+          name, format, startDate, endDate, venue, prizePool, registrationFee, bannerImage: url
         }),
         headers: { "Content-Type": "application/json" }
       });
@@ -116,6 +117,7 @@ export default function AdminDashboard() {
             <input type="date" className="input-field" required onChange={e => setEndDate(e.target.value)} />
             <input type="text" placeholder="Venue" className="input-field" required onChange={e => setVenue(e.target.value)} />
             <input type="text" placeholder="Prize Pool (e.g. ₹50,000)" className="input-field" required onChange={e => setPrizePool(e.target.value)} />
+            <input type="text" placeholder="Registration Fee (e.g. ₹500)" className="input-field" required onChange={e => setRegistrationFee(e.target.value)} />
             
             <div>
               <label className="input-label">Banner Image</label>
@@ -139,7 +141,7 @@ export default function AdminDashboard() {
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-electric-blue">{t.name}</h3>
                   <p className="text-sm text-gray-300">{t.format} • {t.venue}</p>
-                  <p className="text-sm text-gray-300">Prize: {t.prizePool}</p>
+                  <p className="text-sm text-gray-300">Prize: <span className="text-electric-blue">{t.prizePool}</span> • Entry Fee: <span className="text-neon-green">{t.registrationFee}</span></p>
                   <p className="mt-2 font-semibold">
                     Status: <span className={t.status === "open" ? "text-green-400" : "text-red-400"}>{t.status.toUpperCase()}</span>
                   </p>
