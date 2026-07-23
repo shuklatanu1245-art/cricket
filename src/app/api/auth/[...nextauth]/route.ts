@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
 
 const handler = NextAuth({
   providers: [
@@ -13,19 +12,14 @@ const handler = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // Hardcoded admin for initial setup if database is empty/not working yet
         if (credentials.email === "admin@cric.com" && credentials.password === "admin123") {
           return { id: "admin-id", email: credentials.email, role: "admin" };
         }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (user && user.password === credentials.password) {
-          // Note: In production, passwords must be hashed. 
-          return { id: user.id, email: user.email, role: user.role };
+        
+        if (credentials.email === "staff@cric.com" && credentials.password === "staff123") {
+          return { id: "staff-id", email: credentials.email, role: "staff" };
         }
+
         return null;
       },
     }),
@@ -52,7 +46,7 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "fallback_secret_for_local",
 });
 
 export { handler as GET, handler as POST };
