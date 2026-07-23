@@ -11,16 +11,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Navbar */}
-      <nav className="glass-panel sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
-        <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-electric-blue to-neon-green uppercase tracking-wider">
-          CRIC<span className="text-white">PRO</span>
-        </div>
-        <div className="flex gap-4">
-          <Link href="/login" className="text-gray-300 hover:text-white transition-colors">Staff Login</Link>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="hero-bg min-h-[60vh] flex flex-col justify-center items-center text-center p-6 border-b border-slate-700">
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-2xl">
