@@ -113,7 +113,7 @@ export default function Register({ params }: { params: { id: string } }) {
         <p className="text-center text-xl text-gray-300 mb-10">
           Registering for: <span className="font-bold text-white">{tournament.name}</span>
           <br/>
-          Entry Fee: <span className="text-neon-green font-bold">{tournament.registrationFee}</span>
+          Entry Fee: <span className="text-neon-green font-bold">₹{tournament.registrationFee}</span>
         </p>
       )}
       
@@ -209,11 +209,15 @@ export default function Register({ params }: { params: { id: string } }) {
             <option value="Cash">Pay Cash (Offline)</option>
           </select>
           
-          {formData.paymentMethod === "Online" && tournament?.qrCodeImage && (
+          {formData.paymentMethod === "Online" && tournament?.upiId && (
             <div className="mt-6 bg-slate-800 p-6 rounded-xl inline-block border border-electric-blue">
-              <p className="text-sm text-gray-300 mb-4 text-center">Scan this QR Code to pay <span className="font-bold text-white">{tournament.registrationFee}</span></p>
-              <img src={tournament.qrCodeImage} alt="Payment QR Code" className="w-64 h-64 object-contain mx-auto bg-white rounded-lg p-2" />
-              <p className="text-xs text-center text-gray-400 mt-4">After payment, submit the form. Our staff will verify your payment.</p>
+              <p className="text-sm text-gray-300 mb-4 text-center">Scan with PhonePe, GPay, or Paytm<br/>to pay exactly <span className="font-bold text-white">₹{tournament.registrationFee}</span></p>
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${tournament.upiId}&pn=TournamentAdmin&am=${tournament.registrationFee}&cu=INR`)}`} 
+                alt="Payment QR Code" 
+                className="w-64 h-64 object-contain mx-auto bg-white rounded-lg p-2" 
+              />
+              <p className="text-xs text-center text-gray-400 mt-4">After payment is successful, click Submit Registration.</p>
             </div>
           )}
         </div>

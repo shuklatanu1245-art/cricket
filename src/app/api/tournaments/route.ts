@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       venue: data.venue,
       prizePool: data.prizePool,
       registrationFee: data.registrationFee,
-      qrCodeImage: data.qrCodeImage,
+      upiId: data.upiId,
       status: "open",
       createdAt: Date.now(),
     };

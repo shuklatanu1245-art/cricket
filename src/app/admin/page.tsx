@@ -17,7 +17,7 @@ export default function AdminDashboard() {
   const [venue, setVenue] = useState("");
   const [prizePool, setPrizePool] = useState("");
   const [registrationFee, setRegistrationFee] = useState("");
-  const [qrFile, setQrFile] = useState<File | null>(null);
+  const [upiId, setUpiId] = useState("");
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -48,36 +48,21 @@ export default function AdminDashboard() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!qrFile) return alert("Please upload a QR Code for payments");
+    if (!upiId.includes("@")) return alert("Please enter a valid UPI ID (e.g., number@ybl)");
     
     setUploading(true);
     
-    // Convert file to base64
-    const reader = new FileReader();
-    reader.readAsDataURL(qrFile);
-    reader.onloadend = async () => {
-      const base64data = reader.result;
-      
-      // Upload to Cloudinary
-      const uploadRes = await fetch("/api/upload", {
-        method: "POST",
-        body: JSON.stringify({ file: base64data }),
-        headers: { "Content-Type": "application/json" }
-      });
-      const { url } = await uploadRes.json();
-      
-      // Create Tournament
-      await fetch("/api/tournaments", {
-        method: "POST",
-        body: JSON.stringify({
-          name, startDate, endDate, venue, prizePool, registrationFee, qrCodeImage: url
-        }),
-        headers: { "Content-Type": "application/json" }
-      });
-      
-      setUploading(false);
-      fetchTournaments();
-    };
+    // Create Tournament
+    await fetch("/api/tournaments", {
+      method: "POST",
+      body: JSON.stringify({
+        name, startDate, endDate, venue, prizePool, registrationFee, upiId
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+    
+    setUploading(false);
+    fetchTournaments();
   };
 
   const toggleStatus = async (id: string, currentStatus: string) => {
@@ -115,11 +100,12 @@ export default function AdminDashboard() {
             <input type="date" className="input-field" required onChange={e => setEndDate(e.target.value)} />
             <input type="text" placeholder="Venue" className="input-field" required onChange={e => setVenue(e.target.value)} />
             <input type="text" placeholder="Winning Prize Pool (e.g. ₹50,000)" className="input-field" required onChange={e => setPrizePool(e.target.value)} />
-            <input type="text" placeholder="Registration Fee (e.g. ₹500)" className="input-field" required onChange={e => setRegistrationFee(e.target.value)} />
+            <input type="number" placeholder="Registration Fee Amount (e.g. 500)" className="input-field" required onChange={e => setRegistrationFee(e.target.value)} />
             
             <div>
-              <label className="input-label text-neon-green">QR Code for Online Payment</label>
-              <input type="file" accept="image/*" required onChange={e => setQrFile(e.target.files?.[0] || null)} className="input-field" />
+              <label className="input-label text-neon-green">Admin UPI ID (for receiving payments)</label>
+              <input type="text" placeholder="e.g. 9876543210@ybl" required onChange={e => setUpiId(e.target.value)} className="input-field" />
+              <p className="text-xs text-gray-400 mt-1">We will automatically generate a dynamic QR code for this UPI ID with the exact fee amount.</p>
             </div>
 
             <button disabled={uploading} type="submit" className="w-full bg-electric-blue text-navy font-bold py-3 rounded-lg hover:bg-neon-green transition">
@@ -135,13 +121,14 @@ export default function AdminDashboard() {
           ) : (
             tournaments.map((t: any) => (
               <div key={t.id} className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
-                <div className="w-32 h-32 bg-slate-800 rounded-xl flex items-center justify-center p-2">
-                  <img src={t.qrCodeImage} alt="QR Code" className="w-full h-full object-contain" />
+                <div className="w-32 h-32 bg-slate-800 rounded-xl flex flex-col items-center justify-center p-2 text-center">
+                  <span className="text-3xl mb-2">💸</span>
+                  <span className="text-xs font-bold text-gray-400 max-w-full break-all">{t.upiId}</span>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-electric-blue">{t.name}</h3>
                   <p className="text-sm text-gray-300">Venue: {t.venue}</p>
-                  <p className="text-sm text-gray-300">Prize: <span className="text-electric-blue">{t.prizePool}</span> • Entry Fee: <span className="text-neon-green">{t.registrationFee}</span></p>
+                  <p className="text-sm text-gray-300">Prize: <span className="text-electric-blue">{t.prizePool}</span> • Entry Fee: <span className="text-neon-green">₹{t.registrationFee}</span></p>
                   <p className="mt-2 font-semibold">
                     Status: <span className={t.status === "open" ? "text-green-400" : "text-red-400"}>{t.status.toUpperCase()}</span>
                   </p>
