@@ -12,13 +12,12 @@ export default function AdminDashboard() {
 
   // Form State
   const [name, setName] = useState("");
-  const [format, setFormat] = useState("T20");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [venue, setVenue] = useState("");
   const [prizePool, setPrizePool] = useState("");
   const [registrationFee, setRegistrationFee] = useState("");
-  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [qrFile, setQrFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -49,13 +48,13 @@ export default function AdminDashboard() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!bannerFile) return alert("Please upload a banner image");
+    if (!qrFile) return alert("Please upload a QR Code for payments");
     
     setUploading(true);
     
     // Convert file to base64
     const reader = new FileReader();
-    reader.readAsDataURL(bannerFile);
+    reader.readAsDataURL(qrFile);
     reader.onloadend = async () => {
       const base64data = reader.result;
       
@@ -71,7 +70,7 @@ export default function AdminDashboard() {
       await fetch("/api/tournaments", {
         method: "POST",
         body: JSON.stringify({
-          name, format, startDate, endDate, venue, prizePool, registrationFee, bannerImage: url
+          name, startDate, endDate, venue, prizePool, registrationFee, qrCodeImage: url
         }),
         headers: { "Content-Type": "application/json" }
       });
@@ -112,16 +111,15 @@ export default function AdminDashboard() {
           <h2 className="text-2xl font-bold mb-6 text-electric-blue">Add Tournament</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <input type="text" placeholder="Tournament Name" className="input-field" required onChange={e => setName(e.target.value)} />
-            <input type="text" placeholder="Format (e.g., T20, Tennis Ball)" className="input-field" required onChange={e => setFormat(e.target.value)} />
             <input type="date" className="input-field" required onChange={e => setStartDate(e.target.value)} />
             <input type="date" className="input-field" required onChange={e => setEndDate(e.target.value)} />
             <input type="text" placeholder="Venue" className="input-field" required onChange={e => setVenue(e.target.value)} />
-            <input type="text" placeholder="Prize Pool (e.g. ₹50,000)" className="input-field" required onChange={e => setPrizePool(e.target.value)} />
+            <input type="text" placeholder="Winning Prize Pool (e.g. ₹50,000)" className="input-field" required onChange={e => setPrizePool(e.target.value)} />
             <input type="text" placeholder="Registration Fee (e.g. ₹500)" className="input-field" required onChange={e => setRegistrationFee(e.target.value)} />
             
             <div>
-              <label className="input-label">Banner Image</label>
-              <input type="file" accept="image/*" required onChange={e => setBannerFile(e.target.files?.[0] || null)} className="input-field" />
+              <label className="input-label text-neon-green">QR Code for Online Payment</label>
+              <input type="file" accept="image/*" required onChange={e => setQrFile(e.target.files?.[0] || null)} className="input-field" />
             </div>
 
             <button disabled={uploading} type="submit" className="w-full bg-electric-blue text-navy font-bold py-3 rounded-lg hover:bg-neon-green transition">
@@ -137,10 +135,12 @@ export default function AdminDashboard() {
           ) : (
             tournaments.map((t: any) => (
               <div key={t.id} className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
-                <img src={t.bannerImage} alt={t.name} className="w-32 h-32 object-cover rounded-xl" />
+                <div className="w-32 h-32 bg-slate-800 rounded-xl flex items-center justify-center p-2">
+                  <img src={t.qrCodeImage} alt="QR Code" className="w-full h-full object-contain" />
+                </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-electric-blue">{t.name}</h3>
-                  <p className="text-sm text-gray-300">{t.format} • {t.venue}</p>
+                  <p className="text-sm text-gray-300">Venue: {t.venue}</p>
                   <p className="text-sm text-gray-300">Prize: <span className="text-electric-blue">{t.prizePool}</span> • Entry Fee: <span className="text-neon-green">{t.registrationFee}</span></p>
                   <p className="mt-2 font-semibold">
                     Status: <span className={t.status === "open" ? "text-green-400" : "text-red-400"}>{t.status.toUpperCase()}</span>

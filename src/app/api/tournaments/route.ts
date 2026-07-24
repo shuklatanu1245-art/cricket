@@ -19,13 +19,12 @@ export async function POST(req: Request) {
     const newTournament = {
       id: Math.random().toString(36).substring(7),
       name: data.name,
-      format: data.format,
       startDate: new Date(data.startDate).toISOString(),
       endDate: new Date(data.endDate).toISOString(),
       venue: data.venue,
       prizePool: data.prizePool,
       registrationFee: data.registrationFee,
-      bannerImage: data.bannerImage,
+      qrCodeImage: data.qrCodeImage,
       status: "open",
       createdAt: Date.now(),
     };

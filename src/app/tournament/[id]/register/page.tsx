@@ -205,9 +205,17 @@ export default function Register({ params }: { params: { id: string } }) {
         <div>
           <label className="input-label">Payment Method</label>
           <select name="paymentMethod" value={formData.paymentMethod} onChange={handleInputChange} className="input-field max-w-sm">
-            <option value="Online">Pay Online Now</option>
+            <option value="Online">Pay Online Now (UPI / QR)</option>
             <option value="Cash">Pay Cash (Offline)</option>
           </select>
+          
+          {formData.paymentMethod === "Online" && tournament?.qrCodeImage && (
+            <div className="mt-6 bg-slate-800 p-6 rounded-xl inline-block border border-electric-blue">
+              <p className="text-sm text-gray-300 mb-4 text-center">Scan this QR Code to pay <span className="font-bold text-white">{tournament.registrationFee}</span></p>
+              <img src={tournament.qrCodeImage} alt="Payment QR Code" className="w-64 h-64 object-contain mx-auto bg-white rounded-lg p-2" />
+              <p className="text-xs text-center text-gray-400 mt-4">After payment, submit the form. Our staff will verify your payment.</p>
+            </div>
+          )}
         </div>
 
         <button disabled={loading} type="submit" className="w-full bg-electric-blue text-navy font-bold py-4 rounded-xl text-lg hover:bg-neon-green transition">

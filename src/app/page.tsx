@@ -36,11 +36,8 @@ export default async function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {tournaments.map((tournament) => (
               <div key={tournament.id} className="glass-panel rounded-2xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-xl group">
-                <div className="h-64 overflow-hidden relative">
-                  <img src={tournament.bannerImage} alt={tournament.name} className="w-full h-full object-cover group-hover:opacity-80 transition-opacity" />
-                  <div className="absolute top-4 right-4 bg-neon-green text-navy font-bold px-3 py-1 rounded-full text-sm">
-                    {tournament.format}
-                  </div>
+                <div className="h-48 bg-gradient-to-br from-electric-blue to-navy relative flex items-center justify-center">
+                  <span className="text-6xl">🏏</span>
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-bold mb-2">{tournament.name}</h3>
