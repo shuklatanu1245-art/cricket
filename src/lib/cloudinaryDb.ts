@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const DB_FILE_NAME = "cricket_db.json";
+const DB_FILE_NAME = "cricket_db.txt";
 
 export const getDb = async () => {
   try {
