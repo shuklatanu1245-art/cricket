@@ -29,11 +29,13 @@ export async function POST(req: Request) {
       createdAt: Date.now(),
     };
     
+    if (!db.tournaments) db.tournaments = [];
     db.tournaments.push(newTournament);
     await saveDb(db);
     
     return NextResponse.json(newTournament);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create tournament" }, { status: 500 });
+  } catch (error: any) {
+    console.error("CREATE TOURNAMENT ERROR:", error);
+    return NextResponse.json({ error: "Failed to create tournament", details: error.message || String(error) }, { status: 500 });
   }
 }

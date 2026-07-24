@@ -53,13 +53,22 @@ export default function AdminDashboard() {
     setUploading(true);
     
     // Create Tournament
-    await fetch("/api/tournaments", {
-      method: "POST",
-      body: JSON.stringify({
-        name, startDate, endDate, venue, prizePool, registrationFee, upiId
-      }),
-      headers: { "Content-Type": "application/json" }
-    });
+    try {
+      const res = await fetch("/api/tournaments", {
+        method: "POST",
+        body: JSON.stringify({
+          name, startDate, endDate, venue, prizePool, registrationFee, upiId
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        alert("Failed to create tournament: " + (data.error || data.details || "Unknown error"));
+      }
+    } catch (e: any) {
+      alert("Error: " + e.message);
+    }
     
     setUploading(false);
     fetchTournaments();

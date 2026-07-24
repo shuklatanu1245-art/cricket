@@ -33,8 +33,8 @@ export const saveDb = async (data: any) => {
       overwrite: true,
       invalidate: true // Clears CDN cache
     });
-  } catch (e) {
+  } catch (e: any) {
     console.error("Failed to save DB to Cloudinary", e);
-    throw new Error("DB Save Failed");
+    throw new Error("DB Save Failed: " + (e.message || String(e)));
   }
 };
