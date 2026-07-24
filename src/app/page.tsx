@@ -1,17 +1,17 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { getDb } from "@/lib/cloudinaryDb";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   let tournaments: any[] = [];
   try {
-    tournaments = await prisma.tournament.findMany({
-      where: { status: "open" },
-      orderBy: { createdAt: "desc" },
-    });
+    const db = await getDb();
+    tournaments = db.tournaments
+      .filter((t: any) => t.status === "open")
+      .sort((a: any, b: any) => b.createdAt - a.createdAt);
   } catch (error) {
-    console.error("Database connection failed. Vercel build might be missing DATABASE_URL:", error);
+    console.error("Failed to load tournaments from Cloudinary DB:", error);
   }
 
   return (
