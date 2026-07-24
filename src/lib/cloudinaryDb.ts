@@ -1,4 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -24,14 +27,14 @@ export const getDb = async () => {
 
 export const saveDb = async (data: any) => {
   try {
-    const base64Data = Buffer.from(JSON.stringify(data)).toString('base64');
-    const dataUri = `data:application/json;base64,${base64Data}`;
+    const tmpPath = path.join(os.tmpdir(), DB_FILE_NAME);
+    fs.writeFileSync(tmpPath, JSON.stringify(data));
     
-    await cloudinary.uploader.upload(dataUri, {
+    await cloudinary.uploader.upload(tmpPath, {
       resource_type: "raw",
       public_id: DB_FILE_NAME,
       overwrite: true,
-      invalidate: true // Clears CDN cache
+      invalidate: true
     });
   } catch (e: any) {
     console.error("Failed to save DB to Cloudinary", e);
