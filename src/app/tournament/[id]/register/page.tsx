@@ -31,24 +31,38 @@ export default function Register({ params }: { params: { id: string } }) {
   };
 
   const uploadToCloudinary = async (file: File) => {
-    return new Promise<string>((resolve) => {
+    return new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = async () => {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: JSON.stringify({ file: reader.result }),
-          headers: { "Content-Type": "application/json" }
-        });
-        const data = await res.json();
-        resolve(data.url);
+        try {
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            body: JSON.stringify({ file: reader.result }),
+            headers: { "Content-Type": "application/json" }
+          });
+          if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Upload failed (${res.status}): ${errText}`);
+          }
+          const data = await res.json();
+          resolve(data.url);
+        } catch (e: any) {
+          reject(e);
+        }
       };
+      reader.onerror = () => reject(new Error("File read error"));
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profileFile || !govIdFile) return alert("Please upload required documents.");
+    
+    // Check file size (max 2MB per file to avoid Vercel 4.5MB limit)
+    if (profileFile.size > 2 * 1024 * 1024 || govIdFile.size > 2 * 1024 * 1024) {
+      return alert("Images are too large! Please upload images smaller than 2MB each.");
+    }
     
     setLoading(true);
 
