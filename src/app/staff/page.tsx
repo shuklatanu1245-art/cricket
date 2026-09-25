@@ -60,6 +60,17 @@ function StaffDashboardContent() {
     setLoading(false);
   };
 
+  const verifyPayment = async (id: string) => {
+    if (confirm("Mark this registration as Paid and Verified?")) {
+      await fetch(`/api/registrations/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ paymentStatus: "completed" }),
+        headers: { "Content-Type": "application/json" }
+      });
+      fetchRegistrations();
+    }
+  };
+
   if (status === "loading") return <div className="p-10 text-center">Loading...</div>;
 
   return (
@@ -111,12 +122,27 @@ function StaffDashboardContent() {
                       <div className="text-sm text-gray-400">{reg.email}</div>
                     </td>
                     <td className="p-4">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${reg.paymentMethod === 'Cash' ? 'bg-orange-500/20 text-orange-400' : 'bg-green-500/20 text-green-400'}`}>
-                        {reg.paymentMethod}
-                      </span>
+                      <div className="mb-2">
+                        <span className={`px-2 py-1 rounded text-xs font-bold ${reg.paymentMethod === 'Cash' ? 'bg-orange-500/20 text-orange-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                          {reg.paymentMethod}
+                        </span>
+                      </div>
+                      <div className="mb-2">
+                        Status: <span className={`font-bold ${reg.paymentStatus === 'completed' ? 'text-green-400' : 'text-red-400'}`}>
+                          {reg.paymentStatus?.toUpperCase() || 'PENDING'}
+                        </span>
+                      </div>
+                      {reg.paymentScreenshotUrl && (
+                        <a href={reg.paymentScreenshotUrl} target="_blank" className="text-electric-blue underline text-sm block mb-2">View Screenshot</a>
+                      )}
+                      {reg.paymentStatus !== 'completed' && (
+                        <button onClick={() => verifyPayment(reg.id)} className="px-3 py-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold rounded">
+                          Verify Payment
+                        </button>
+                      )}
                     </td>
                     <td className="p-4">
-                      <a href={reg.profilePhotoUrl} target="_blank" className="text-electric-blue underline text-sm block">Profile</a>
+                      <a href={reg.profilePhotoUrl} target="_blank" className="text-electric-blue underline text-sm block mb-1">Profile</a>
                       <a href={reg.govIdUrl} target="_blank" className="text-electric-blue underline text-sm block">Gov ID</a>
                     </td>
                   </tr>

@@ -47,8 +47,9 @@ export async function POST(req: Request) {
       emergencyPhone: data.emergencyPhone,
       profilePhotoUrl: data.profilePhotoUrl,
       govIdUrl: data.govIdUrl,
+      paymentScreenshotUrl: data.paymentScreenshotUrl || null,
       paymentMethod: data.paymentMethod,
-      paymentStatus: data.paymentMethod === "Cash" ? "pending" : "completed",
+      paymentStatus: "pending",
       createdAt: Date.now(),
     };
     
