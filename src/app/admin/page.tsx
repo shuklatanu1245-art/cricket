@@ -64,7 +64,7 @@ export default function AdminDashboard() {
       
       const data = await res.json();
       if (!res.ok) {
-        alert("Failed to create tournament: " + (data.error || data.details || "Unknown error"));
+        alert("Failed to create tournament: " + (data.details || data.error || "Unknown error"));
       }
     } catch (e: any) {
       alert("Error: " + e.message);
