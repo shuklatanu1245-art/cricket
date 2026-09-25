@@ -132,12 +132,9 @@ function StaffDashboardContent() {
                           {reg.paymentStatus?.toUpperCase() || 'PENDING'}
                         </span>
                       </div>
-                      {reg.paymentScreenshotUrl && (
-                        <a href={reg.paymentScreenshotUrl} target="_blank" className="text-electric-blue underline text-sm block mb-2">View Screenshot</a>
-                      )}
                       {reg.paymentStatus !== 'completed' && (
                         <button onClick={() => verifyPayment(reg.id)} className="px-3 py-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold rounded">
-                          Verify Payment
+                          Approve Payment
                         </button>
                       )}
                     </td>

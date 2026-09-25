@@ -23,7 +23,6 @@ export default function Register({ params }: { params: { id: string } }) {
   
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [govIdFile, setGovIdFile] = useState<File | null>(null);
-  const [paymentScreenshotFile, setPaymentScreenshotFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -57,15 +56,6 @@ export default function Register({ params }: { params: { id: string } }) {
       // 1. Upload Images
       const profilePhotoUrl = await uploadToCloudinary(profileFile);
       const govIdUrl = await uploadToCloudinary(govIdFile);
-      
-      let paymentScreenshotUrl = null;
-      if (formData.paymentMethod === "Online") {
-        if (!paymentScreenshotFile) {
-          setLoading(false);
-          return alert("Please upload the payment screenshot.");
-        }
-        paymentScreenshotUrl = await uploadToCloudinary(paymentScreenshotFile);
-      }
 
       // 2. Submit Registration
       const res = await fetch("/api/registrations", {
@@ -74,8 +64,7 @@ export default function Register({ params }: { params: { id: string } }) {
           tournamentId: params.id,
           ...formData,
           profilePhotoUrl,
-          govIdUrl,
-          paymentScreenshotUrl
+          govIdUrl
         }),
         headers: { "Content-Type": "application/json" }
       });
@@ -222,18 +211,14 @@ export default function Register({ params }: { params: { id: string } }) {
           </select>
           
           {formData.paymentMethod === "Online" && tournament?.upiId && (
-            <div className="mt-6 bg-slate-800 p-6 rounded-xl inline-block border border-electric-blue w-full max-w-md">
+            <div className="mt-6 bg-slate-800 p-6 rounded-xl inline-block border border-electric-blue">
               <p className="text-sm text-gray-300 mb-4 text-center">Scan with PhonePe, GPay, or Paytm<br/>to pay exactly <span className="font-bold text-white">₹{tournament.registrationFee}</span></p>
               <img 
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${tournament.upiId}&pn=TournamentAdmin&am=${tournament.registrationFee}&cu=INR`)}`} 
                 alt="Payment QR Code" 
-                className="w-64 h-64 object-contain mx-auto bg-white rounded-lg p-2 mb-4" 
+                className="w-64 h-64 object-contain mx-auto bg-white rounded-lg p-2" 
               />
-              <div className="border-t border-slate-600 pt-4 mt-4">
-                <label className="input-label text-neon-green">Upload Payment Screenshot *</label>
-                <input type="file" accept="image/*" required onChange={(e) => setPaymentScreenshotFile(e.target.files?.[0] || null)} className="input-field" />
-                <p className="text-xs text-gray-400 mt-2 text-center">Your registration will be pending until the admin verifies this screenshot.</p>
-              </div>
+              <p className="text-xs text-center text-gray-400 mt-4">After payment is successful, click Submit Registration.</p>
             </div>
           )}
         </div>
