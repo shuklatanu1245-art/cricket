@@ -96,6 +96,14 @@ export default function Register({ params }: { params: { id: string } }) {
     }
   };
 
+  const [tournament, setTournament] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(`/api/tournaments/${params.id}`)
+      .then(res => res.json())
+      .then(data => setTournament(data));
+  }, [params.id]);
+
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 text-center">
@@ -112,14 +120,6 @@ export default function Register({ params }: { params: { id: string } }) {
       </div>
     );
   }
-
-  const [tournament, setTournament] = useState<any>(null);
-
-  useEffect(() => {
-    fetch(`/api/tournaments/${params.id}`)
-      .then(res => res.json())
-      .then(data => setTournament(data));
-  }, [params.id]);
 
   return (
     <div className="min-h-screen py-16 px-6 max-w-4xl mx-auto">
