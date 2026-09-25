@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register({ params }: { params: { id: string } }) {
@@ -101,7 +101,7 @@ export default function Register({ params }: { params: { id: string } }) {
 
   const [tournament, setTournament] = useState<any>(null);
 
-  require("react").useEffect(() => {
+  useEffect(() => {
     fetch(`/api/tournaments/${params.id}`)
       .then(res => res.json())
       .then(data => setTournament(data));
