@@ -1,31 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 11, 15, 25;
+  --background-end-rgb: 11, 15, 25;
+}
+
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0A192F;
-  color: white;
-}
-
-.glass-panel {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.input-field {
-  @apply w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric-blue focus:ring-1 focus:ring-electric-blue transition-colors;
-}
-
-.input-label {
-  @apply block text-sm font-medium text-gray-300 mb-2;
-}
-
-.hero-bg {
-  background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 1)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+  color: rgb(var(--foreground-rgb));
+  background-color: #0B0F19; /* Solid fallback */
+  background-image: var(--bg-cricket, none);
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+@layer components {
+  /* Solid, clean digital cards instead of glass */
+  .solid-card {
+    @apply bg-digital-card border border-gray-800 shadow-xl overflow-hidden;
+  }
+
+  .input-label {
+    @apply block text-sm font-semibold text-gray-300 mb-2;
+  }
+
+  .input-field {
+    @apply w-full bg-gray-900 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-digital-blue focus:ring-1 focus:ring-digital-blue transition-colors;
+  }
+}
+
+/* Custom Scrollbar for a cleaner look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
 }

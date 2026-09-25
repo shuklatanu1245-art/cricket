@@ -85,13 +85,13 @@ export default function Register({ params }: { params: { id: string } }) {
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 text-center">
-        <div className="glass-panel p-10 rounded-2xl max-w-lg">
-          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="solid-card p-10 rounded-2xl max-w-lg border border-gray-800">
+          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_#22c55e]">
             <span className="text-4xl text-white">✓</span>
           </div>
-          <h2 className="text-3xl font-bold text-electric-blue mb-4">Registration Successful!</h2>
-          <p className="text-gray-300 mb-8">Thank you for registering. We will review your application and contact you soon.</p>
-          <button onClick={() => router.push("/")} className="bg-electric-blue text-navy font-bold px-8 py-3 rounded-lg hover:bg-neon-green transition">
+          <h2 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Registration Successful!</h2>
+          <p className="text-gray-400 mb-8 font-light text-lg">Thank you for registering. We will review your application and you will receive a confirmation email once approved.</p>
+          <button onClick={() => router.push("/")} className="bg-digital-blue text-white font-bold px-8 py-3.5 rounded-lg hover:bg-digital-blue-hover transition-colors shadow-md w-full">
             Back to Home
           </button>
         </div>
@@ -109,16 +109,16 @@ export default function Register({ params }: { params: { id: string } }) {
 
   return (
     <div className="min-h-screen py-16 px-6 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold text-center mb-2 text-electric-blue">Player Registration</h1>
+      <h1 className="text-4xl font-extrabold text-center mb-2 text-white tracking-tight">Player <span className="text-digital-blue">Registration</span></h1>
       {tournament && (
-        <p className="text-center text-xl text-gray-300 mb-10">
+        <p className="text-center text-xl text-gray-400 mb-10 font-light">
           Registering for: <span className="font-bold text-white">{tournament.name}</span>
           <br/>
-          Entry Fee: <span className="text-neon-green font-bold">₹{tournament.registrationFee}</span>
+          Entry Fee: <span className="text-digital-blue font-bold">₹{tournament.registrationFee}</span>
         </p>
       )}
       
-      <form onSubmit={handleSubmit} className="glass-panel p-8 md:p-12 rounded-3xl shadow-2xl space-y-8">
+      <form onSubmit={handleSubmit} className="solid-card p-8 md:p-12 rounded-3xl space-y-8">
         {/* Basic Info */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
@@ -152,78 +152,80 @@ export default function Register({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        <hr className="border-slate-700" />
-
         {/* Player Profile */}
-        <h3 className="text-2xl font-bold text-neon-green">Player Profile</h3>
-        <div className="grid md:grid-cols-3 gap-6">
-          <div>
-            <label className="input-label">Primary Role</label>
-            <select name="role" value={formData.role} onChange={handleInputChange} className="input-field">
-              <option>Batsman</option>
-              <option>Bowler</option>
-              <option>All-Rounder</option>
-              <option>Wicket Keeper</option>
-            </select>
-          </div>
-          <div>
-            <label className="input-label">Batting Style</label>
-            <select name="battingStyle" value={formData.battingStyle} onChange={handleInputChange} className="input-field">
-              <option>Right-hand</option>
-              <option>Left-hand</option>
-            </select>
-          </div>
-          <div>
-            <label className="input-label">Bowling Style</label>
-            <select name="bowlingStyle" value={formData.bowlingStyle} onChange={handleInputChange} className="input-field">
-              <option>Right-arm Fast</option>
-              <option>Right-arm Spin</option>
-              <option>Left-arm Fast</option>
-              <option>Left-arm Spin</option>
-            </select>
+        <div>
+          <h3 className="text-2xl font-bold text-white mb-6 pb-2 border-b border-gray-800">Player Profile</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <label className="input-label">Primary Role</label>
+              <select name="role" value={formData.role} onChange={handleInputChange} className="input-field">
+                <option>Batsman</option>
+                <option>Bowler</option>
+                <option>All-Rounder</option>
+                <option>Wicket Keeper</option>
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Batting Style</label>
+              <select name="battingStyle" value={formData.battingStyle} onChange={handleInputChange} className="input-field">
+                <option>Right-hand</option>
+                <option>Left-hand</option>
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Bowling Style</label>
+              <select name="bowlingStyle" value={formData.bowlingStyle} onChange={handleInputChange} className="input-field">
+                <option>Right-arm Fast</option>
+                <option>Right-arm Spin</option>
+                <option>Left-arm Fast</option>
+                <option>Left-arm Spin</option>
+              </select>
+            </div>
           </div>
         </div>
-
-        <hr className="border-slate-700" />
 
         {/* Documents */}
-        <h3 className="text-2xl font-bold text-neon-green">Documents</h3>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="input-label">Profile Photo</label>
-            <input type="file" accept="image/*" required onChange={(e) => setProfileFile(e.target.files?.[0] || null)} className="input-field" />
-          </div>
-          <div>
-            <label className="input-label">Government ID</label>
-            <input type="file" accept="image/*" required onChange={(e) => setGovIdFile(e.target.files?.[0] || null)} className="input-field" />
+        <div>
+          <h3 className="text-2xl font-bold text-white mb-6 pb-2 border-b border-gray-800">Documents</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="input-label">Profile Photo</label>
+              <input type="file" accept="image/*" required onChange={(e) => setProfileFile(e.target.files?.[0] || null)} className="input-field bg-gray-800" />
+            </div>
+            <div>
+              <label className="input-label">Government ID</label>
+              <input type="file" accept="image/*" required onChange={(e) => setGovIdFile(e.target.files?.[0] || null)} className="input-field bg-gray-800" />
+            </div>
           </div>
         </div>
-
-        <hr className="border-slate-700" />
 
         {/* Payment */}
-        <h3 className="text-2xl font-bold text-neon-green">Payment Option</h3>
         <div>
-          <label className="input-label">Payment Method</label>
-          <select name="paymentMethod" value={formData.paymentMethod} onChange={handleInputChange} className="input-field max-w-sm">
-            <option value="Online">Pay Online Now (UPI / QR)</option>
-            <option value="Cash">Pay Cash (Offline)</option>
-          </select>
-          
-          {formData.paymentMethod === "Online" && tournament?.upiId && (
-            <div className="mt-6 bg-slate-800 p-6 rounded-xl inline-block border border-electric-blue">
-              <p className="text-sm text-gray-300 mb-4 text-center">Scan with PhonePe, GPay, or Paytm<br/>to pay exactly <span className="font-bold text-white">₹{tournament.registrationFee}</span></p>
-              <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${tournament.upiId}&pn=TournamentAdmin&am=${tournament.registrationFee}&cu=INR`)}`} 
-                alt="Payment QR Code" 
-                className="w-64 h-64 object-contain mx-auto bg-white rounded-lg p-2" 
-              />
-              <p className="text-xs text-center text-gray-400 mt-4">After payment is successful, click Submit Registration.</p>
-            </div>
-          )}
+          <h3 className="text-2xl font-bold text-white mb-6 pb-2 border-b border-gray-800">Payment Option</h3>
+          <div>
+            <label className="input-label">Payment Method</label>
+            <select name="paymentMethod" value={formData.paymentMethod} onChange={handleInputChange} className="input-field max-w-sm">
+              <option value="Online">Pay Online Now (UPI / QR)</option>
+              <option value="Cash">Pay Cash (Offline)</option>
+            </select>
+            
+            {formData.paymentMethod === "Online" && tournament?.upiId && (
+              <div className="mt-8 bg-gray-900 p-8 rounded-2xl border border-digital-blue shadow-[0_0_15px_rgba(37,99,235,0.15)] flex flex-col items-center max-w-md">
+                <p className="text-sm text-gray-400 mb-4 text-center leading-relaxed">Scan with PhonePe, GPay, or Paytm<br/>to pay exactly <span className="font-bold text-white text-lg">₹{tournament.registrationFee}</span></p>
+                <div className="bg-white p-3 rounded-xl mb-6 shadow-sm">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${tournament.upiId}&pn=TournamentAdmin&am=${tournament.registrationFee}&cu=INR`)}`} 
+                    alt="Payment QR Code" 
+                    className="w-56 h-56 object-contain" 
+                  />
+                </div>
+                <p className="text-sm text-center text-digital-blue font-medium bg-digital-blue/10 px-4 py-2 rounded-full border border-digital-blue/20">After payment, click Submit Registration.</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <button disabled={loading} type="submit" className="w-full bg-electric-blue text-navy font-bold py-4 rounded-xl text-lg hover:bg-neon-green transition">
+        <button disabled={loading} type="submit" className="w-full bg-digital-blue text-white font-extrabold py-4 rounded-xl text-lg hover:bg-digital-blue-hover transition-colors shadow-lg mt-10">
           {loading ? "Processing Registration..." : "Submit Registration"}
         </button>
       </form>

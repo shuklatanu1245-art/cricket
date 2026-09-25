@@ -9,9 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'navy': '#0A192F',
-        'electric-blue': '#00E5FF',
-        'neon-green': '#39FF14'
+        'digital-dark': '#0B0F19', // Deep dark blue/black
+        'digital-card': '#111827', // Lighter dark for cards (Tailwind gray-900)
+        'digital-blue': '#2563EB', // Professional blue
+        'digital-blue-hover': '#1D4ED8',
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'sans-serif'],
+      },
+      backgroundImage: {
+        'cricket-bg': "linear-gradient(to bottom, rgba(11, 15, 25, 0.8), rgba(11, 15, 25, 1)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000&auto=format&fit=crop')",
       }
     },
   },

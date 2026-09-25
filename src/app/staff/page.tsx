@@ -75,9 +75,9 @@ function StaffDashboardContent() {
 
   return (
     <div className="min-h-screen p-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-10">
-        <h1 className="text-4xl font-bold">Staff Dashboard - Registrations</h1>
-        <div className="flex gap-4 items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <h1 className="text-4xl font-extrabold tracking-tight">Staff <span className="text-digital-blue">Dashboard</span></h1>
+        <div className="flex gap-4 items-center w-full md:w-auto">
           <select 
             className="input-field max-w-xs !py-2"
             value={selectedTournament}
@@ -88,59 +88,70 @@ function StaffDashboardContent() {
               <option key={t.id} value={t.id}>{t.name}</option>
             ))}
           </select>
-          <button onClick={() => signOut()} className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Logout</button>
+          <button onClick={() => signOut()} className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg transition-colors">Logout</button>
         </div>
       </div>
 
       {loading ? (
-        <p>Loading registrations...</p>
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-digital-blue"></div>
+        </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left glass-panel rounded-xl overflow-hidden">
-            <thead className="bg-slate-800 text-electric-blue">
+        <div className="overflow-x-auto shadow-2xl rounded-2xl border border-gray-800">
+          <table className="w-full text-left bg-digital-card">
+            <thead className="bg-gray-900 border-b border-gray-800 text-gray-300">
               <tr>
-                <th className="p-4">Name / Team</th>
-                <th className="p-4">Type</th>
-                <th className="p-4">Contact</th>
-                <th className="p-4">Payment</th>
-                <th className="p-4">Documents</th>
+                <th className="p-5 font-semibold">Name / Team</th>
+                <th className="p-5 font-semibold">Type</th>
+                <th className="p-5 font-semibold">Contact</th>
+                <th className="p-5 font-semibold">Payment Status</th>
+                <th className="p-5 font-semibold">Documents</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-800">
               {registrations.length === 0 ? (
-                <tr><td colSpan={5} className="p-4 text-center">No registrations found.</td></tr>
+                <tr><td colSpan={5} className="p-10 text-center text-gray-500">No registrations found.</td></tr>
               ) : (
                 registrations.map((reg: any) => (
-                  <tr key={reg.id} className="border-b border-slate-700 hover:bg-slate-800/50">
-                    <td className="p-4">
-                      <div className="font-bold">{reg.fullName}</div>
-                      {reg.teamName && <div className="text-sm text-gray-400">Team: {reg.teamName}</div>}
+                  <tr key={reg.id} className="hover:bg-gray-800/50 transition-colors">
+                    <td className="p-5">
+                      <div className="font-bold text-white text-lg">{reg.fullName}</div>
+                      {reg.teamName && <div className="text-sm text-digital-blue font-medium mt-1">Team: {reg.teamName}</div>}
                     </td>
-                    <td className="p-4">{reg.regType}</td>
-                    <td className="p-4">
-                      <div>{reg.phone}</div>
-                      <div className="text-sm text-gray-400">{reg.email}</div>
+                    <td className="p-5 text-gray-300">{reg.regType}</td>
+                    <td className="p-5">
+                      <div className="text-white">{reg.phone}</div>
+                      <div className="text-sm text-gray-400 mt-1">{reg.email}</div>
                     </td>
-                    <td className="p-4">
-                      <div className="mb-2">
-                        <span className={`px-2 py-1 rounded text-xs font-bold ${reg.paymentMethod === 'Cash' ? 'bg-orange-500/20 text-orange-400' : 'bg-blue-500/20 text-blue-400'}`}>
-                          {reg.paymentMethod}
+                    <td className="p-5">
+                      <div className="flex flex-col items-start gap-2">
+                        <span className={`px-2 py-1 rounded text-xs font-bold ${reg.paymentMethod === 'Cash' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
+                          {reg.paymentMethod.toUpperCase()}
                         </span>
+                        
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className={`h-2 w-2 rounded-full ${reg.paymentStatus === 'completed' ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`}></span>
+                          <span className={`text-sm font-bold ${reg.paymentStatus === 'completed' ? 'text-green-400' : 'text-red-400'}`}>
+                            {reg.paymentStatus?.toUpperCase() || 'PENDING'}
+                          </span>
+                        </div>
+                        
+                        {reg.paymentStatus !== 'completed' && (
+                          <button onClick={() => verifyPayment(reg.id)} className="mt-2 px-4 py-1.5 bg-digital-blue hover:bg-digital-blue-hover text-white text-xs font-bold rounded-md transition-colors shadow-sm">
+                            Approve Payment
+                          </button>
+                        )}
                       </div>
-                      <div className="mb-2">
-                        Status: <span className={`font-bold ${reg.paymentStatus === 'completed' ? 'text-green-400' : 'text-red-400'}`}>
-                          {reg.paymentStatus?.toUpperCase() || 'PENDING'}
-                        </span>
-                      </div>
-                      {reg.paymentStatus !== 'completed' && (
-                        <button onClick={() => verifyPayment(reg.id)} className="px-3 py-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold rounded">
-                          Approve Payment
-                        </button>
-                      )}
                     </td>
-                    <td className="p-4">
-                      <a href={reg.profilePhotoUrl} target="_blank" className="text-electric-blue underline text-sm block mb-1">Profile</a>
-                      <a href={reg.govIdUrl} target="_blank" className="text-electric-blue underline text-sm block">Gov ID</a>
+                    <td className="p-5">
+                      <div className="flex flex-col gap-2">
+                        <a href={reg.profilePhotoUrl} target="_blank" className="inline-flex items-center gap-1 text-gray-300 hover:text-white transition-colors text-sm bg-gray-800 px-3 py-1.5 rounded-md border border-gray-700 w-max">
+                          👤 Profile
+                        </a>
+                        <a href={reg.govIdUrl} target="_blank" className="inline-flex items-center gap-1 text-gray-300 hover:text-white transition-colors text-sm bg-gray-800 px-3 py-1.5 rounded-md border border-gray-700 w-max">
+                          🪪 Gov ID
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 ))
