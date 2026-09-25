@@ -72,10 +72,11 @@ export default function Register({ params }: { params: { id: string } }) {
       if (res.ok) {
         setSuccess(true);
       } else {
-        alert("Registration failed. Please try again.");
+        const errData = await res.json().catch(() => ({}));
+        alert("Registration failed: " + (errData.details || errData.error || "Please try again."));
       }
-    } catch (error) {
-      alert("An error occurred.");
+    } catch (error: any) {
+      alert("An error occurred: " + error.message);
     } finally {
       setLoading(false);
     }

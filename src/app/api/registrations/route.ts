@@ -52,12 +52,13 @@ export async function POST(req: Request) {
       createdAt: Date.now(),
     };
     
+    if (!db.registrations) db.registrations = [];
     db.registrations.push(newReg);
     await saveDb(db);
     
     return NextResponse.json(newReg);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Registration error:", error);
-    return NextResponse.json({ error: "Registration failed" }, { status: 500 });
+    return NextResponse.json({ error: "Registration failed", details: error.message || String(error) }, { status: 500 });
   }
 }
