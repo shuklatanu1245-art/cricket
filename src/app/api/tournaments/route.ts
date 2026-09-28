@@ -5,10 +5,14 @@ export async function GET() {
   try {
     const db = await getDb();
     const tournaments = db.tournaments.sort((a: any, b: any) => b.createdAt - a.createdAt);
-    return NextResponse.json(tournaments);
+    return NextResponse.json(tournaments, { headers: { 'Access-Control-Allow-Origin': '*' } });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch tournaments" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch tournaments" }, { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } });
   }
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
 }
 
 export async function POST(req: Request) {
@@ -33,9 +37,9 @@ export async function POST(req: Request) {
     db.tournaments.push(newTournament);
     await saveDb(db);
     
-    return NextResponse.json(newTournament);
+    return NextResponse.json(newTournament, { headers: { 'Access-Control-Allow-Origin': '*' } });
   } catch (error: any) {
     console.error("CREATE TOURNAMENT ERROR:", error);
-    return NextResponse.json({ error: "Failed to create tournament", details: error.message || String(error) }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create tournament", details: error.message || String(error) }, { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } });
   }
 }
