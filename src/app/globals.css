@@ -4,13 +4,13 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 11, 15, 25;
-  --background-end-rgb: 11, 15, 25;
+  --background-start-rgb: 5, 9, 20;
+  --background-end-rgb: 5, 9, 20;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #0B0F19; /* Solid fallback */
+  background-color: #050914; /* Solid fallback */
   background-image: var(--bg-cricket, none);
   background-size: cover;
   background-position: center;
@@ -19,32 +19,40 @@ body {
 }
 
 @layer components {
-  /* Solid, clean digital cards instead of glass */
+  /* Ultra-premium solid card */
   .solid-card {
-    @apply bg-digital-card border border-gray-800 shadow-xl overflow-hidden;
+    @apply bg-digital-card border border-gray-800 shadow-2xl overflow-hidden transition-all duration-300;
+  }
+
+  .solid-card:hover {
+    @apply border-gray-700 shadow-neon;
   }
 
   .input-label {
-    @apply block text-sm font-semibold text-gray-300 mb-2;
+    @apply block text-sm font-semibold text-gray-400 mb-2 tracking-wide uppercase text-xs;
   }
 
   .input-field {
-    @apply w-full bg-gray-900 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-digital-blue focus:ring-1 focus:ring-digital-blue transition-colors;
+    @apply w-full bg-[#0d131f] border border-gray-800 text-white rounded-lg px-4 py-3.5 focus:outline-none focus:border-digital-blue focus:ring-1 focus:ring-digital-blue transition-all shadow-inner;
+  }
+  
+  .input-field:hover {
+    @apply border-gray-700;
   }
 }
 
 /* Custom Scrollbar for a cleaner look */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0F19;
+  background: #050914;
 }
 ::-webkit-scrollbar-thumb {
-  background: #374151;
-  border-radius: 4px;
+  background: #1f2937;
+  border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2563EB;
+  background: #3b82f6;
 }

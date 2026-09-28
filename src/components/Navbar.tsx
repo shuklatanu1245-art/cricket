@@ -12,18 +12,18 @@ export default function Navbar() {
   const role = (session?.user as any)?.role;
 
   return (
-    <nav className="bg-[#0B0F19]/95 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-md">
-      <Link href="/" className="text-2xl font-black text-white uppercase tracking-wider">
-        CRIC<span className="text-digital-blue">PRO</span>
+    <nav className="bg-[#050914]/80 backdrop-blur-xl border-b border-gray-800/60 sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-2xl">
+      <Link href="/" className="text-3xl font-black text-white uppercase tracking-tighter drop-shadow-lg">
+        CRIC<span className="text-digital-blue drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">PRO</span>
       </Link>
 
       <div className="relative">
         <button 
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors bg-gray-900 px-4 py-2 rounded-full border border-gray-700"
+          className="flex items-center gap-2 text-gray-300 hover:text-white transition-all bg-[#0B0F19] hover:bg-gray-800 hover:shadow-neon px-5 py-2.5 rounded-full border border-gray-800 hover:border-digital-blue/50"
         >
-          <User size={20} />
-          <span className="hidden md:inline">{session ? "My Account" : "Menu"}</span>
+          <User size={18} />
+          <span className="hidden md:inline font-semibold text-sm uppercase tracking-wide">{session ? "My Account" : "Menu"}</span>
         </button>
 
         {isOpen && (
