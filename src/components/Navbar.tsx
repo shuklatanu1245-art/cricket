@@ -28,6 +28,15 @@ export default function Navbar() {
 
         {isOpen && (
           <div className="absolute right-0 mt-3 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl py-2 flex flex-col z-50">
+            <a 
+              href="/CricProScorer.apk" 
+              download
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 hover:bg-gray-800 text-green-400 font-bold transition-colors text-left flex items-center gap-2"
+            >
+              <span>📱</span> Download Scorer App
+            </a>
+            <hr className="border-gray-700 my-1" />
             {session ? (
               <>
                 {role === "admin" && (
